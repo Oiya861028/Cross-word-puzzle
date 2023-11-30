@@ -17,7 +17,9 @@ public class CrossWord {
                 words[i] = sc.next();
             }
         }
-
+        //generate the board
+        int length = longestWord(words);
+        int[][] crossWordBoard = new int[length][length];
     }
 
     public static boolean validWord(String word){
@@ -25,5 +27,16 @@ public class CrossWord {
             if(!Character.isLetter(word.charAt(i))) return false;
         }
         return true;
+    }
+    public static int longestWord(String[] word){
+        int longest = 0;
+        int longestIndex = -1;
+        for(int i = 0; i< word.length; i++){
+            if(longest < word[i].length()) {
+                longest = word[i].length();
+                longestIndex = i;
+            }
+        }
+        return word[longestIndex].length();
     }
 }
