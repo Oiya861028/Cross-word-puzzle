@@ -1,27 +1,37 @@
 import java.util.Scanner;
 public class CrossWord {
+    public static Scanner sc= new Scanner(System.in);
     public static void main(String[] args){
-        Scanner sc= new Scanner(System.in);
-        String[] words = new String[5];
-        // Ask user to enter 5 words
+        char[][] words = getWords(5);
+        for(char[] word: words){
+            for(char i: word){
+                System.out.print(i);
+            }
+            System.out.println();
+        }
+        char[][] crossWord = new char[100][100];
+    }
+    public static char[][] getWords(int numOfWords){
+        char[][] words = new char[numOfWords][];
         for(int i=0;i<words.length;i++){
             System.out.print("Enter a word:");
-            words[i]= sc.next();
-            while(words[i].length()<3){ //Check for length
+            String userInput = sc.nextLine();
+            while(userInput.length()<3){ //Check for length
                 System.out.println("You need to enter a word that's 3 character or more:");
-                words[i] = sc.next();
+                userInput = sc.nextLine();
             }
             //Check for illegal words
-            while(!validWord(words[i])){
+            while(!validWord(userInput)){
                 System.out.println("You enter a word with illegal letter. Try again:");
-                words[i] = sc.next();
+                userInput = sc.next();
+            }
+            words[i] = new char[userInput.length()];
+            for(int j=0;j<userInput.length();j++){
+                words[i][j] = userInput.charAt(j);
             }
         }
-        //generate the board
-        int length = longestWord(words);
-        int[][] crossWordBoard = new int[length][length];
+        return words;
     }
-
     public static boolean validWord(String word){
         for(int i=0;i<word.length();i++){
             if(!Character.isLetter(word.charAt(i))) return false;
@@ -39,4 +49,5 @@ public class CrossWord {
         }
         return word[longestIndex].length();
     }
+
 }
