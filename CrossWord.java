@@ -2,18 +2,15 @@ import java.util.Scanner;
 public class CrossWord {
     public static Scanner sc= new Scanner(System.in);
     public static void main(String[] args){
-        char[][] words = getWords(5);
-        for(char[] word: words){
-            for(char i: word){
-                System.out.print(i);
-            }
-            System.out.println();
+        word[] CrossWords = getWords(5);
+
+        for(word w: CrossWords){
+            System.out.println(w);
         }
-        char[][] crossWord = new char[100][100];
     }
-    public static char[][] getWords(int numOfWords){
-        char[][] words = new char[numOfWords][];
-        for(int i=0;i<words.length;i++){
+    public static word[] getWords(int numOfWords){
+        word[] words = new word[numOfWords];
+        for(int i=0;i<numOfWords; i++){
             System.out.print("Enter a word:");
             String userInput = sc.nextLine();
             while(userInput.length()<3){ //Check for length
@@ -23,14 +20,12 @@ public class CrossWord {
             //Check for illegal words
             while(!validWord(userInput)){
                 System.out.println("You enter a word with illegal letter. Try again:");
-                userInput = sc.next();
+                userInput = sc.nextLine();
             }
-            words[i] = new char[userInput.length()];
-            for(int j=0;j<userInput.length();j++){
-                words[i][j] = userInput.charAt(j);
-            }
+            words[i] = new word(userInput);
         }
-        return words;
+
+        return sortWord(words);
     }
     public static boolean validWord(String word){
         for(int i=0;i<word.length();i++){
@@ -38,16 +33,19 @@ public class CrossWord {
         }
         return true;
     }
-    public static int longestWord(String[] word){
-        int longest = 0;
-        int longestIndex = -1;
-        for(int i = 0; i< word.length; i++){
-            if(longest < word[i].length()) {
-                longest = word[i].length();
-                longestIndex = i;
+
+    public static word[] sortWord(word[] words){
+        for(int i=0;i<words.length-1;i++){
+            for(int j=i+1;j<words.length;j++){
+                if(words[j].toString().length()>words[i].toString().length()){
+                    word temp = words[i];
+                    words[i] = words[j];
+                    words[j] = temp;
+                }
             }
         }
-        return word[longestIndex].length();
+        return words;
+
     }
 
 }
