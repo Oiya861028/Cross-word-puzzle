@@ -1,12 +1,29 @@
-import java.util.Scanner;
+import java.util.*;
 public class CrossWord {
     public static Scanner sc= new Scanner(System.in);
+    public static Random random = new Random();
     public static void main(String[] args){
-        word[] CrossWords = getWords(5);
+        word[] words = getWords(5);
+        Board grid = new Board(15, 15);
 
-        for(word w: CrossWords){
-            System.out.println(w);
+        for(int n = 5;n>0;n--){
+            word[] placedWords = grid.getPlacedWords();
+            if(placedWords.length==0){
+              words[n].setHorOrVert(true);
+              words[n].setStartingCoordinate(grid.length/2,grid.width/2-words[n].getLength()/2);
+              System.out.println(grid.addWord(words[n]));
+            }
+            for(word w: placedWords){
+                for(int i = 0; i< words[n].getLength(); i++){
+                    for(int j=0;j<w.getLength();j++){
+                        if(words[n].toString().charAt(i)==w.toString().charAt(j)){
+
+                        }
+                    }
+                }
+            }
         }
+        grid.printBoard();
     }
     public static word[] getWords(int numOfWords){
         word[] words = new word[numOfWords];
