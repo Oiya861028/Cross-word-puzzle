@@ -1,12 +1,14 @@
-public class word {
+public class Word {
     private String word;
+    private String wordWithoutTakenLetters;
     private int length;
     private boolean isHori;
     private int startingRow, startingCol;
 
-    public word(String word){
+    public Word(String word){
         this.word = word;
         length = word.length();
+        wordWithoutTakenLetters = word;
     }
 
     public void setHorOrVert(boolean horizontalOrVertical){
@@ -31,5 +33,19 @@ public class word {
     public boolean getIsHori(){
         return isHori;
     }
+    public void takeLettersAway(int index){
+        wordWithoutTakenLetters = wordWithoutTakenLetters.substring(0,index)+wordWithoutTakenLetters.substring(index+1);
+    }
 
+    public char charAt(int i) {
+        return word.charAt(i);
+    }
+
+    public char[] toCharArray() {
+        char[] charArray = new char[word.length()];
+        for(int i=0;i<word.length();i++){
+            charArray[i] = word.charAt(i);
+        }
+        return charArray;
+    }
 }
