@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 
 public class Board {
-    public char[][] board;
-    public final int length, width;
-    public ArrayList<String> horizontalWords = new ArrayList<String>();
-    public ArrayList<String> verticalWords = new ArrayList<String>();
-    public word[] placedWords = new word[5];
+    private char[][] board;
+    protected final int length;
+    protected final int width;
+    private ArrayList<word> horizontalWords = new ArrayList<word>();
+    private ArrayList<word> verticalWords = new ArrayList<word>();
+    private ArrayList<word> placedWords = new ArrayList<word>();
     public Board(int length, int width){
         this.length = length;
         this.width = width;
@@ -27,6 +28,22 @@ public class Board {
                 board[w.getStartingRow()][j] = w.toString().charAt(k);
                 k++;
             }
+            horizontalWords.add(w);
+            placedWords.add(w);
+
+        } else{
+            if(w.getLength()+w.getStartingRow()>length) return false; //check if word will go off the grid
+            for(int i=w.getStartingRow();i<w.getStartingRow()+w.getLength();i++){ //check if word collide with another word on the board
+                if(board[i][w.getStartingCol()]!=' ' && board[i][w.getStartingCol()]!=w.toString().charAt(i)) return false;
+            }
+            //Adding word to the grid after all the tests
+            int k=0;
+            for(int j = w.getStartingRow(); j <w.getLength()+w.getStartingRow(); j++){
+                board[j][w.getStartingRow()] = w.toString().charAt(k);
+                k++;
+            }
+            horizontalWords.add(w);
+            placedWords.add(w);
         }
         return true;
     }
@@ -38,7 +55,7 @@ public class Board {
             System.out.println();
         }
     }
-    public word[] getPlacedWords(){
+    public ArrayList<word> getPlacedWords(){
         return placedWords;
     }
 }
