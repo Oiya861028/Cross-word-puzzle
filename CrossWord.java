@@ -2,36 +2,76 @@ import java.util.*;
 public class CrossWord {
     public static Scanner sc= new Scanner(System.in);
     public static Random random = new Random();
+    public static Board currentBoard;
     public static void main(String[] args){
-        ArrayList<Word> words = getWords(5);
-        Board grid = new Board(15, 15);
+        System.out.println("Welcome to the crossWord puzzle generator");
+        System.out.println("Please enter the length of your grid:");
+        int length = sc.nextInt();
+        System.out.println("Please enter the width of your grid:");
+        int width = sc.nextInt();
+        currentBoard = new Board(length, width);
+        System.out.println("How many word would you like to place in your grid? ");
+        int numOfWords = sc.nextInt();
+        ArrayList<Word> words = getWords(numOfWords);
         //Add the first word
-        words.getFirst().setStartingCoordinate(grid.length/2, grid.width/2- words.getFirst().getLength()/2);
+        words.getFirst().setStartingCoordinate(currentBoard.length/2, currentBoard.width/2- words.getFirst().getLength()/2);
         words.getFirst().setHorOrVert(true);
-        grid.addWord(words.getFirst());
+        currentBoard.addWord(words.getFirst());
         words.removeFirst();
+        words = findIntersection(words);
+        while(!words.isEmpty()){ //Prompt the user until all words are placed
+            int previousSize = words.size();
+            words = findIntersection(words);
+            while(words.size()<previousSize){ //Keep finding intersections until no longer possible
+                previousSize = words.size();
+                words = findIntersection(words);
+            }
+            currentBoard.printBoard();
+            if(words.isEmpty()) break;
+            System.out.print("The following words are not able to fit on the board: ");
+            for(Word word: words){
+                System.out.print(word+" ");
+            }
+            System.out.println();
+            int replaceWordIndex = -1;
+            do {
+                System.out.println("Enter the index of the word you want to replace(Starting at 0):");
+                if (sc.hasNextInt()) {
+                    replaceWordIndex = sc.nextInt();
+                    if (replaceWordIndex < 0 || replaceWordIndex >= words.size()) {
+                        System.out.println("Invalid index, try again:");
+                    }
+                } else {
+                    System.out.println("Invalid input, try again:");
+                    sc.nextLine();
+                }
+            } while (replaceWordIndex < 0 || replaceWordIndex >= words.size());
 
-        words = findIntersection(grid, words);
-        grid.printBoard();
+            Word newWord = new Word(getOneWord());
+            words.set(replaceWordIndex, newWord);
+        }
+        currentBoard.printBoard();
     }
     public static ArrayList<Word> getWords(int numOfWords){
         ArrayList<Word> words = new ArrayList<Word>();
         for(int i=0;i<numOfWords; i++){
-            System.out.print("Enter a Word:");
-            String userInput = sc.nextLine();
-            while(userInput.length()<3){ //Check for length
-                System.out.println("You need to enter a Word that's 3 character or more:");
-                userInput = sc.nextLine();
-            }
-            //Check for illegal words
-            while(!validWord(userInput)){
-                System.out.println("You enter a Word with illegal letter. Try again:");
-                userInput = sc.nextLine();
-            }
-            words.add(new Word(userInput.toUpperCase()));
+            words.add(new Word(getOneWord()));
         }
-
         return sortWord(words);
+    }
+    public static String getOneWord(){
+        System.out.print("Enter a Word:");
+        String userInput = sc.nextLine();
+        while(userInput.length()<3 || userInput.length()>currentBoard.length){ //Check for length
+            System.out.println("You need to enter a Word that's 3 character or more:");
+            userInput = sc.nextLine();
+        }
+        //Check for illegal words
+        while(!validWord(userInput)){
+            System.out.println("You enter a Word with illegal letter. Try again:");
+            userInput = sc.nextLine();
+        }
+        return userInput.toUpperCase();
     }
     public static boolean validWord(String word){
         for(int i=0;i<word.length();i++){
@@ -55,11 +95,12 @@ public class CrossWord {
         return words;
 
     }
-    public static ArrayList<Word> findIntersection(Board currentBoard, ArrayList<Word> applicantWords){ //return words not placed
+    public static ArrayList<Word> findIntersection(ArrayList<Word> applicantWords){ //return words not placed
         ArrayList<Word> placedWords;
         ArrayList<Word> unplacedWord = new ArrayList<>(applicantWords);
         for(Word term: applicantWords) { //Taking one word at a time and trying to fit it inside the puzzle
-            placedWords = currentBoard.getPlacedWords(); //update the wordBank every loop
+            placedWords = currentBoard.getPlacedWords();//update the wordBank every loop
+            Collections.shuffle(placedWords);
             nextTerm:
             for(Word placedWord: placedWords){
                 if (placedWord.getIsHori()) { //if the word is horizontal, we have to increment the col to check
