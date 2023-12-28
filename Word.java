@@ -1,6 +1,6 @@
 public class Word {
-    private String word;
-    private int length;
+    private final String word;
+    private final int length;
     private boolean isHori;
     private int startingRow, startingCol;
 
