@@ -5,7 +5,7 @@ public class Board {
     private char[][] board;
     protected final int length;
     protected final int width;
-    protected int score = 0;
+    protected int score = 0; //to be continued(if I come back to this program)
     private ArrayList<Word> placedWords = new ArrayList<>();
     public Board(int length, int width){
         this.length = length;

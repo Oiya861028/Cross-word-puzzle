@@ -38,6 +38,7 @@ public class CrossWord {
             }
             System.out.println();
             int replaceWordIndex = -1;
+            //this do-while was done with some help from chatGPT, I think although try-except also work, it avoided a lot of hassles
             do {
                 System.out.println("Enter the index of the word you want to replace(Starting at 0):");
                 if (sc.hasNextInt()) {
@@ -56,7 +57,7 @@ public class CrossWord {
         }
         currentBoard.printBoard();
     }
-    public static ArrayList<Word> getWords(int numOfWords){
+    public static ArrayList<Word> getWords(int numOfWords){//get userInput for the amount of words that will be placed
         ArrayList<Word> words = new ArrayList<Word>();
         for(int i=0;i<numOfWords; i++){
             words.add(new Word(getOneWord()));
@@ -77,7 +78,7 @@ public class CrossWord {
         }
         return userInput.toUpperCase();
     }
-    public static boolean validWord(String word){
+    public static boolean validWord(String word){ //check if the word contians non-alphabetic letters
         for(int i=0;i<word.length();i++){
             if(!Character.isLetter(word.charAt(i))) return false;
         }
