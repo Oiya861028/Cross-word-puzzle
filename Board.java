@@ -30,7 +30,7 @@ public class Board {
             }
             placedWords.addFirst(w); //so it always start from the most recently placed Word
 
-        } else{
+        } else{ //vertical word
             int index = 0;
             for(int i=w.getStartingRow();i<w.getStartingRow()+w.getLength();i++){ //check if Word collide with another Word on the board
                 if(board[i][w.getStartingCol()]!=' ' && board[i][w.getStartingCol()]!=w.toString().charAt(index)) return false;
@@ -39,7 +39,7 @@ public class Board {
             //Adding Word to the grid after all the tests
             int k=0;
             for(int j = w.getStartingRow(); j <w.getLength()+w.getStartingRow(); j++){
-                board[j][w.getStartingRow()] = w.toString().charAt(k);
+                board[j][w.getStartingCol()] = w.toString().charAt(k);
                 k++;
             }
             placedWords.addFirst(w);

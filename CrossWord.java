@@ -9,8 +9,9 @@ public class CrossWord {
         words.getFirst().setStartingCoordinate(grid.length/2, grid.width/2- words.getFirst().getLength()/2);
         words.getFirst().setHorOrVert(true);
         grid.addWord(words.getFirst());
+        words.removeFirst();
 
-        findIntersection(grid, words);
+        words = findIntersection(grid, words);
         grid.printBoard();
     }
     public static ArrayList<Word> getWords(int numOfWords){
@@ -27,7 +28,7 @@ public class CrossWord {
                 System.out.println("You enter a Word with illegal letter. Try again:");
                 userInput = sc.nextLine();
             }
-            words.add(new Word(userInput));
+            words.add(new Word(userInput.toUpperCase()));
         }
 
         return sortWord(words);
@@ -56,6 +57,7 @@ public class CrossWord {
     }
     public static ArrayList<Word> findIntersection(Board currentBoard, ArrayList<Word> applicantWords){ //return words not placed
         ArrayList<Word> placedWords;
+        ArrayList<Word> unplacedWord = new ArrayList<>(applicantWords);
         for(Word term: applicantWords) { //Taking one word at a time and trying to fit it inside the puzzle
             placedWords = currentBoard.getPlacedWords(); //update the wordBank every loop
             nextTerm:
@@ -72,7 +74,7 @@ public class CrossWord {
                                         term.setStartingCoordinate(placedWord.getStartingRow()-i, placedWord.getStartingCol()+placedWordIndex);
                                         placed = currentBoard.addWord(term); //will check for overlapping and then place the word if there are no overlap
                                         if(placed){
-                                            applicantWords.remove(term);
+                                            unplacedWord.remove(term);
                                             break nextTerm;
                                         }
                                     }
@@ -94,7 +96,7 @@ public class CrossWord {
                                         term.setStartingCoordinate(placedWord.getStartingRow()+placedWordIndex, placedWord.getStartingCol()-i);
                                         placed = currentBoard.addWord(term); //will check for overlapping and then place the word if there are no overlap
                                         if(placed){
-                                            applicantWords.remove(term);
+                                            unplacedWord.remove(term);
                                             break nextTerm;
                                         }
                                     }
@@ -105,7 +107,8 @@ public class CrossWord {
                 }
             }
         }
-        return applicantWords;
+
+        return unplacedWord;
     }
 
 }
