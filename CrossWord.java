@@ -5,11 +5,14 @@ public class CrossWord {
     public static Board currentBoard;
     public static void main(String[] args){
         System.out.println("Welcome to the crossWord puzzle generator");
+        //get length
         System.out.println("Please enter the length of your grid:");
         int length = sc.nextInt();
+        //get width
         System.out.println("Please enter the width of your grid:");
         int width = sc.nextInt();
         currentBoard = new Board(length, width);
+        //get the number of words that's going to be entered
         System.out.println("How many word would you like to place in your grid? ");
         int numOfWords = sc.nextInt();
         ArrayList<Word> words = getWords(numOfWords);
@@ -18,6 +21,7 @@ public class CrossWord {
         words.getFirst().setHorOrVert(true);
         currentBoard.addWord(words.getFirst());
         words.removeFirst();
+
         words = findIntersection(words);
         while(!words.isEmpty()){ //Prompt the user until all words are placed
             int previousSize = words.size();
