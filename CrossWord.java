@@ -17,10 +17,11 @@ public class CrossWord {
         int numOfWords = sc.nextInt();
         ArrayList<Word> words = getWords(numOfWords);
         //Add the first word
-        words.getFirst().setStartingCoordinate(currentBoard.length/2, currentBoard.width/2- words.getFirst().getLength()/2);
-        words.getFirst().setHorOrVert(true);
+        Word firstWord = words.get(random.nextInt(words.toArray().length));
+        firstWord.setStartingCoordinate(currentBoard.length/2, currentBoard.width/2- words.getFirst().getLength()/2);
+        firstWord.setHorOrVert(true);
         currentBoard.addWord(words.getFirst());
-        words.removeFirst();
+        words.remove(firstWord);
 
         words = findIntersection(words);
         while(!words.isEmpty()){ //Prompt the user until all words are placed
